@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/main_page.css">
+    <title>Mashin-archivator</title>
+
+    <!-- Index page -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="header-logo">
+                <a href="">
+                    <img src="pictures/archivator_logo.png" alt="" class="">
+                </a>
+            </div>
+            <div class="header-menu">
+                <ul>
+                    <li><a href="index.php">Главная</a></li>
+                    <li><a href="about.php">Обо мне</a></li>
+                    <li><a href="contact.php">Мемсы</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+    <div class="content-container">
+        <!-- CONTENT -->
+        <div class="overlay file-drop-overlay"
+        id="file-overlay"
+        ondragover="overlayDragOverHandler(event);"
+        ondragleave="overlayDragLeaveHandler(event);"></div>
+
+        <div class="container-inner">
+            <div class="arch-window"> 
+                <div class="arch-title">
+                    <h1>Machine-Arch</h1>
+                </div>  
+                <div class="arch-description">
+                    (ARCHиватор кривого прогера***)
+                </div>
+                <div 
+                    id="file-window"
+                    ondrop="fileDropHandler(event);" 
+                    ondragover="fileDragOverHandler(event);" 
+                    ondragleave="fileDragLeaveHandler(event);"
+                    class="file-window">
+
+                    <div class="file-window-desc">Перетяните файл сюда...</div>
+                    <label for="file-uploader">
+                        <div class="choose-file-text">Выберите файл:</div>
+                    </label>
+                    <input id="file-uploader" type="file" accept="image/*,.pdf" />
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <footer>
+        <div class="footer-column">
+            <div class="footer-text-block">
+                2025г. Все права защищены(хзхз)
+            </div>
+            
+        </div>
+        <div class="footer-column">
+            <div class="footer-text-block">
+                Не ломайте сайт позязя. Я обижусь((
+            </div>
+            <div class="footer-text-block">
+                Спасибо Евгению Петрову за моральную поддержку
+            </div>
+        </div>
+
+    </footer>
+
+    <script type="text/javascript" src="js/archivator.js"></script>
+</body>
+</html>
