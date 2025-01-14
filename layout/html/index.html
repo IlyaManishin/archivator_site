@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/index.css">
-    <link rel="stylesheet" href="css/main_page.css">
+    <link rel="stylesheet" href="../css/index.css">
+    <link rel="stylesheet" href="../css/main_page.css">
+    <link rel="icon" type="image/x-icon" href="/pictures/archivator_logo.png">
     <title>Mashin-archivator</title>
 
     <!-- Index page -->
@@ -17,7 +18,7 @@
         <div class="header-container">
             <div class="header-logo">
                 <a href="">
-                    <img src="pictures/archivator_logo.png" alt="" class="">
+                    <img src="../pictures/archivator_logo.png" alt="" class="">
                 </a>
             </div>
             <div class="header-menu">
@@ -31,25 +32,17 @@
     </header>
     <div class="content-container">
         <!-- CONTENT -->
-        <div class="overlay file-drop-overlay"
-        id="file-overlay"
-        ondragover="overlayDragOverHandler(event);"
-        ondragleave="overlayDragLeaveHandler(event);"></div>
+        <div class="overlay file-drop-overlay" id="file-overlay"></div>
 
         <div class="container-inner">
             <div class="arch-window"> 
                 <div class="arch-title">
-                    <h1>Machine-Arch</h1>
+                    <h1>Archiso-Machine</h1>
                 </div>  
                 <div class="arch-description">
                     (ARCHиватор кривого прогера***)
                 </div>
-                <div 
-                    id="file-window"
-                    ondrop="fileDropHandler(event);" 
-                    ondragover="fileDragOverHandler(event);" 
-                    ondragleave="fileDragLeaveHandler(event);"
-                    class="file-window">
+                <div id="file-window" class="file-window">
 
                     <div class="file-window-desc">Перетяните файл сюда...</div>
                     <label for="file-uploader">
@@ -79,6 +72,9 @@
 
     </footer>
 
-    <script type="text/javascript" src="js/archivator.js"></script>
+    <script type="module" src="../js/index.js"></script>
+    <script type="module" src="../js/archivator.js"></script>
+    <script type="module" src="../js/config.js"></script>
+
 </body>
 </html>

@@ -1,3 +1,7 @@
+import {config} from "../js/config.js"
+
+console.log(config.base-host);
+
 function overlayDragOverHandler(event){
     console.log("hdfdffdfdfdf")
     event.preventDefault();
@@ -20,7 +24,37 @@ function fileDragLeaveHandler(event){
     document.getElementById("file-overlay").classList.remove("activated");
 }
 
+function uploadFile(file){
+    console.log(file);
+}
+
 function fileDropHandler(event){
     event.preventDefault()  
-    console.log(event)  
+
+    fileDragLeaveHandler(event);
+
+    let items = Array.from(event.dataTransfer.items);
+    let file = null;
+    for (let i = 0; i < items.length; i++){
+        let curItem = items[i];
+        if (curItem.kind == "file"){
+            file = curItem;
+            break;
+        }
+    }
+    if (!file) return;
+    uploadFile(file);
 }
+
+function handlersConnecting(){
+    const fileOverlay = document.getElementById("file-overlay");
+    const fileWindow = document.getElementById("file-window");
+    
+    fileOverlay.addEventListener("dragover", overlayDragOverHandler);
+    fileOverlay.addEventListener("dragleave", overlayDragLeaveHandler);
+    
+    fileWindow.addEventListener("dragover", fileDragOverHandler);
+    fileWindow.addEventListener("dragleave", fileDragLeaveHandler);
+    fileWindow.addEventListener("drop", fileDropHandler);       
+}
+handlersConnecting();
