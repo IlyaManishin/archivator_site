@@ -17,8 +17,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-import main
+import archivator.api_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path("archivator/", archivator.api_views.send_file_to_archivate)
 ]

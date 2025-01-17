@@ -1,6 +1,5 @@
 import {config} from "../js/config.js"
-
-console.log(config.base-host);
+import {notifier} from "../js/notifier.js"
 
 function overlayDragOverHandler(event){
     console.log("hdfdffdfdfdf")
@@ -24,11 +23,37 @@ function fileDragLeaveHandler(event){
     document.getElementById("file-overlay").classList.remove("activated");
 }
 
-function uploadFile(file){
-    console.log(file);
+let isUploading = false;
+
+async function onProgressFile(){
+
 }
 
-function fileDropHandler(event){
+async function onUploadFile(){
+
+}
+
+async function uploadFile(file){
+    const url = `http://${config["base-host"]}/archivator/`;
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const xhr = new XMLHttpRequest()
+    xhr.open("POST", url, true);
+
+    xhr.upload.onprogress = onProgressFile;
+    xhr.upload.onload = onUploadFile;
+
+    xhr.onload = function(){
+        //smth
+    }
+    
+    xhr.send(formData);
+    
+    
+}
+
+async function fileDropHandler(event){
     event.preventDefault()  
 
     fileDragLeaveHandler(event);
@@ -38,12 +63,19 @@ function fileDropHandler(event){
     for (let i = 0; i < items.length; i++){
         let curItem = items[i];
         if (curItem.kind == "file"){
-            file = curItem;
+            file = curItem.getAsFile();
             break;
         }
     }
     if (!file) return;
-    uploadFile(file);
+    if (file.size > config["max-file-size-bytes"]){
+        const errorMessage = "Файл превышает 100мб";
+        notifier(errorMessage, "error");
+        return;
+    }
+    if (isUploading) return;
+
+    await uploadFile(file);
 }
 
 function handlersConnecting(){

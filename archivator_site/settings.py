@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-vr)9k!+!d5woufp8w5!98jeu3w9%%8t#(3iwfj!p2@c7d_%606
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["0.0.0.0"]
 
 
 # Application definition
@@ -37,6 +37,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "rest_framework",
+    "corsheaders",
+    
+    
+    "archivator"
 ]
 
 MIDDLEWARE = [
@@ -47,6 +52,16 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    
+    
+]
+
+CORS_ALLOWED_ORIGINS = [
+    "http://0.0.0.0:8000",  
+    "http://127.0.0.1:8080",
 ]
 
 ROOT_URLCONF = 'archivator_site.urls'
