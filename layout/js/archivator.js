@@ -2,7 +2,6 @@ import {config} from "../js/config.js"
 import {notifier} from "../js/notifier.js"
 
 function overlayDragOverHandler(event){
-    console.log("hdfdffdfdfdf")
     event.preventDefault();
     document.getElementById("file-overlay").classList.add("activated");
 }
@@ -44,12 +43,13 @@ async function uploadFile(file){
     xhr.upload.onprogress = onProgressFile;
     xhr.upload.onload = onUploadFile;
 
-    xhr.onload = function(){
-        //smth
+    xhr.onloadend = function(){
+        isUploading = false;
     }
     
     xhr.send(formData);
     
+
     
 }
 
@@ -74,7 +74,8 @@ async function fileDropHandler(event){
         return;
     }
     if (isUploading) return;
-
+    isUploading = true;
+    notifier("Файл получен", "debug")
     await uploadFile(file);
 }
 
