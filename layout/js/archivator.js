@@ -1,5 +1,6 @@
-import {config} from "../js/config.js"
-import {notifier} from "../js/notifier.js"
+import {config} from "../js/config.js";
+import {notifier} from "../js/notifier.js";
+import {refreshToken} from "../js/index.js";
 
 function overlayDragOverHandler(event){
     event.preventDefault();
@@ -33,24 +34,34 @@ async function onUploadFile(){
 }
 
 async function uploadFile(file){
-    const url = `http://${config["base-host"]}/archivator/`;
+    const url = `${config["base-host"]}/archivator/`;
     const formData = new FormData();
     formData.append("file", file);
 
-    const xhr = new XMLHttpRequest()
+    const xhr = new XMLHttpRequest();
     xhr.open("POST", url, true);
+    
+    const accessToken = localStorage.getItem("access-token");
+    xhr.setRequestHeader("Authorization", accessToken);
+    
 
     xhr.upload.onprogress = onProgressFile;
     xhr.upload.onload = onUploadFile;
 
-    xhr.onloadend = function(){
-        isUploading = false;
+    xhr.onloadend = async function(){
+        if (xhr.status == 401){
+            notifier("Токена нет", "debug");
+            let success = await refreshToken();
+            console.log(success);
+            if (!success) return;
+            
+            await uploadFile(file)
+        }
+        else{
+            isUploading = false;
+        }
     }
-    
     xhr.send(formData);
-    
-
-    
 }
 
 async function fileDropHandler(event){

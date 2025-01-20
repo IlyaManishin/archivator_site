@@ -1,5 +1,6 @@
-*/__pycache__
-/template_sources
+**/__pycache__
 main.py
 notes.txt
 .vscode
+db.sqlite3
+**/media/** 

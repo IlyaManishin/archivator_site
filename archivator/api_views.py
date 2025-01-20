@@ -9,7 +9,7 @@ from rest_framework.exceptions import bad_request
 from django.utils.crypto import get_random_string
 
 from archivator import app_settings
-
+from main.models import UserToken
 
 
 @api_view(["POST"])
@@ -21,6 +21,10 @@ def send_file_to_archivate(request: Request):
     if uploadedFile.size > app_settings.MAX_FILE_SIZE_BYTES:
         return bad_request(request, "Превышен лимит размера файла")
     
+    access_token = request.headers.get("Authorization", "")
+    if not access_token or not UserToken.objects.filter(token=access_token).first():
+        return Response("Не авторизован", status=401)
+    
     file_name = uploadedFile.name
     new_file_name = f"{get_random_string(length=15)}_{file_name}"
     file_dest_path = app_settings.FILES_TO_ARCHIVATE_DIR / new_file_name
@@ -28,4 +32,4 @@ def send_file_to_archivate(request: Request):
         for chunk in uploadedFile.chunks():
             file.write(chunk)
     
-    return Response({"anws" : "answ"})
+    return Response("Файл загружен")
