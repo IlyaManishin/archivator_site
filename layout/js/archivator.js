@@ -25,13 +25,22 @@ function fileDragLeaveHandler(event){
 
 let isUploading = false;
 
-async function onProgressFile(){
-
+async function onStartUploading(){
+    const fileWindowInner = document.getElementsByClassName("file-window-inner")[0];
+    fileWindowInner.style.display = "none";
+    
+    const loadingPanel = document.getElementsByClassName("file-loading-animation")[0];
+    loadingPanel.style.display = "flex";
 }
 
-async function onUploadFile(){
+async function onEndUploading(status){
+    const loadingPanel = document.getElementsByClassName("file-loading-animation")[0];
+    loadingPanel.style.display = "none";
 
+    const fileWindowInner = document.getElementsByClassName("file-window-inner")[0];
+    fileWindowInner.style.display = "flex";
 }
+
 
 async function uploadFile(file){
     const url = `${config["base-host"]}/archivator/`;
@@ -44,10 +53,8 @@ async function uploadFile(file){
     const accessToken = localStorage.getItem("access-token");
     xhr.setRequestHeader("Authorization", accessToken);
     
-
-    xhr.upload.onprogress = onProgressFile;
-    xhr.upload.onload = onUploadFile;
-
+    
+    let uploadStatus = 0;
     xhr.onloadend = async function(){
         if (xhr.status == 401){
             notifier("Токена нет", "debug");
@@ -56,10 +63,12 @@ async function uploadFile(file){
             if (!success) return;
             
             await uploadFile(file)
+            return;
         }
         else{
             isUploading = false;
         }
+        await onEndUploading(xhr.status);
     }
     xhr.send(formData);
 }
@@ -68,8 +77,8 @@ async function fileDropHandler(event){
     event.preventDefault()  
 
     fileDragLeaveHandler(event);
-
     let items = Array.from(event.dataTransfer.items);
+    console.log(items);
     let file = null;
     for (let i = 0; i < items.length; i++){
         let curItem = items[i];
@@ -87,6 +96,8 @@ async function fileDropHandler(event){
     if (isUploading) return;
     isUploading = true;
     notifier("Файл получен", "debug")
+
+    await onStartUploading();
     await uploadFile(file);
 }
 

@@ -43,10 +43,6 @@
     width: 400px;
     position: relative;
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    
     background-color: #f8fe92;
     border-radius: 30px;
 
@@ -58,7 +54,6 @@
     top: 20%;
 
     color: #957a3b;
-
 }
 
 .file-window.highlighted{
@@ -105,6 +100,16 @@
     border-width: 2px;
 }
 
+.file-window-inner{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .file-window input{
     display: none;
 }
@@ -134,5 +139,18 @@
     text-align: center;
     font-family: "Raleway", "Roboto";
     font-size: 20px;
+}
+
+
+.file-loading-animation{
+    display: none;
+    height: 100%;
+    width: 100%;
+}
+
+.file-loading-animation img{
+    margin: auto; 
+    height: 100px;
+    width: auto;  
 }
 

@@ -25,7 +25,7 @@
                 <ul>
                     <li><a href="index.php">Главная</a></li>
                     <li><a href="about.php">Обо мне</a></li>
-                    <li><a href="contact.php">Мемсы</a></li>
+                    <li><a href="contact.php">Фотки</a></li>
                 </ul>
             </div>
         </div>
@@ -43,12 +43,16 @@
                     (ARCHиватор кривого прогера***)
                 </div>
                 <div id="file-window" class="file-window">
-
-                    <div class="file-window-desc">Перетяните файл сюда...</div>
-                    <label for="file-uploader">
-                        <div class="choose-file-text">Выберите файл:</div>
-                    </label>
-                    <input id="file-uploader" type="file" accept="image/*,.pdf" />
+                    <div class="file-window-inner">
+                        <div class="file-window-desc">Перетяните файл сюда...</div>
+                        <label for="file-uploader">
+                            <div class="choose-file-text">Выберите файл:</div>
+                        </label>
+                        <input id="file-uploader" type="file" accept="image/*,.pdf" />
+                    </div>
+                    <div class="file-loading-animation">
+                        <img src="../pictures/file_loading_animation.gif">
+                    </div>
                 </div>
             </div>
         </div>

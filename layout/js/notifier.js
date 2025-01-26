@@ -1,5 +1,8 @@
 import { config } from "../js/config.js"
 
+
+
+
 export function notifier(message="", type="error"){
     if (type == "debug" && !config["is-debug"]) return;
     
