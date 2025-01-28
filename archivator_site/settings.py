@@ -140,3 +140,7 @@ MEDIA_ROOT.mkdir(parents=True, exist_ok=True)
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
+import logging
+logging.basicConfig(format=" %(name)s :: %(levelname)-8s :: %(message)s",
+                    level=logging.DEBUG)

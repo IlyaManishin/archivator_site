@@ -68,6 +68,7 @@ async function uploadFile(file){
         else{
             isUploading = false;
         }
+        console.log(xhr.responseText)
         await onEndUploading(xhr.status);
     }
     xhr.send(formData);

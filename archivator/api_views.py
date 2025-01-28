@@ -13,11 +13,13 @@ from django.core.files.base import File
 from archivator import app_settings
 from archivator import models
 from archivator import archivation_logic
+from archivator import utils
+from archivator.utils import arch_logger
 from main.models import UserToken
 
 
 @api_view(["POST"])
-def send_file_to_archivate(request: Request):
+def get_file_from_web_archivator(request: Request):
     if "file" not in request.FILES: 
         return bad_request(request, "Отсутствует файл")
     uploaded_file = request.FILES["file"]
@@ -30,20 +32,24 @@ def send_file_to_archivate(request: Request):
     if not access_token or not user_token:
         return Response("Не авторизован", status=401)
     
-    file_name = uploaded_file.name
+    original_filename: str = uploaded_file.name
+    is_archive = original_filename.endswith(app_settings.ARCHIVATOR_EXTENSION)
     
-    file_id, new_file_name, file_dest_path, check_path = "", "", "", ""
-    while not file_id or os.path.exists(check_path):
-        file_id = get_random_string(length=10)
-        new_file_name = f"{file_id}_{file_name}"
-        file_dest_path = app_settings.FILES_TO_ARCHIVATE_DIR / new_file_name
-        check_path = app_settings.ARCHIVATED_FILES_DIR / f"{file_id}.rar"
+    file_id = utils.get_free_file_id()
+    new_file_name = f"{file_id}_{original_filename}"
+    file_dest_path = app_settings.TEMP_FILES_DIR / new_file_name
     
     with open(file_dest_path, "wb") as file:
         for chunk in uploaded_file.chunks():
             file.write(chunk)
-    archivation_logic.archivate_file(user_token, file_dest_path, file_id)
 
+    if not is_archive:
+        try:
+            archivation_logic.archivate_file(user_token, file_dest_path, file_id, original_filename)
+        except Exception as err:
+            arch_logger.exception(err)
+    else:
+        pass
     if os.path.exists(file_dest_path): os.remove(file_dest_path)
-    time.sleep(5)
+    time.sleep(2)
     return Response("Файл загружен", 200)
