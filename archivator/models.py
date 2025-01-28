@@ -9,6 +9,7 @@ class FileTypes():
 class UserFiles(models.Model):
     user_token = models.ForeignKey(UserToken, on_delete=models.CASCADE, max_length=64)
     file_id = models.CharField(max_length=32)
+    original_name = models.CharField(max_length=256)
     
     file_path = models.CharField(unique=True, max_length=128)
     file_type = models.CharField(max_length=20)

@@ -22,6 +22,6 @@ import main
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("archivator/", archivator.api_views.get_file_from_web_archivator),
+    path("archivator/", include("archivator.urls"), name="archivator"),
     path("", include("main.urls"), name="main"),
 ]

@@ -10,6 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+import logging
+logging.basicConfig(format="%(name)s :: %(levelname)s :: (%(filename)s).%(funcName)s(%(lineno)d) :: %(message)s",
+                    level=logging.DEBUG)
+
+
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -140,7 +145,3 @@ MEDIA_ROOT.mkdir(parents=True, exist_ok=True)
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
-import logging
-logging.basicConfig(format=" %(name)s :: %(levelname)-8s :: %(message)s",
-                    level=logging.DEBUG)

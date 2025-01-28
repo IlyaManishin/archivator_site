@@ -1,6 +1,7 @@
-import subprocess
+import requests
 
-def _archivate(src_path):
-    subprocess.call(["zip", src_path, "/home/mashina/Documents/projects/archivator_site_proj/media/storage/files_to_archivate"])
-    
-_archivate("/home/mashina/Documents/projects/archivator_site_proj/media/storage/files_to_archivate/ab5giesLYq_notes.zip")
+headers = {
+    "Authorization" : "Bearer hxosCipxZrOhnzZfnAG82Xj0KZrSj8Z0UKR51lXI",
+}
+resp = requests.get("http://0.0.0.0:8081/archivator/files-list/", headers=headers)
+print(resp.text)

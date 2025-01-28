@@ -43,7 +43,7 @@ async function onEndUploading(status){
 
 
 async function uploadFile(file){
-    const url = `${config["base-host"]}/archivator/`;
+    const url = `${config["base-host"]}/archivator/archivate/`;
     const formData = new FormData();
     formData.append("file", file);
 
@@ -53,14 +53,15 @@ async function uploadFile(file){
     const accessToken = localStorage.getItem("access-token");
     xhr.setRequestHeader("Authorization", accessToken);
     
-    
-    let uploadStatus = 0;
     xhr.onloadend = async function(){
         if (xhr.status == 401){
             notifier("Токена нет", "debug");
             let success = await refreshToken();
             console.log(success);
-            if (!success) return;
+            if (!success) {
+                isUploading = false;
+                return;
+            }
             
             await uploadFile(file)
             return;
