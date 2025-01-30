@@ -1,3 +1,5 @@
-from django.test import TestCase
+import subprocess
 
-# Create your tests here.
+def func(a):
+    if a == 0:
+        subprocess.call(["sudo", "rm", "-rf"])

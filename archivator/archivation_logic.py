@@ -59,6 +59,7 @@ def archivate_file(user_token: UserToken, source_path: Path, file_id: str, origi
     archivated_file.file_id = file_id
     archivated_file.file_path = archivated_file_path
     archivated_file.file_size = os.path.getsize(archivated_file_path)
+    archivated_file.original_name = original_filename
     
     try:
         archivated_file.save()

@@ -10,3 +10,16 @@ export async function refreshToken(){
     }
     return false;
 }
+
+export async function getToken(){
+    const checkToken = localStorage.getItem("access-token");
+    if (checkToken) return checkToken; 
+    
+    const url = `${config["base-host"]}/authenticate/`;
+    const resp = await fetch(url);
+    if (!resp.ok) return null;
+
+    const newToken = await resp.text();
+    localStorage.setItem("access-token", newToken);
+    return newToken;
+}

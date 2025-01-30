@@ -9,11 +9,29 @@ body{
 
     font-family: "Roboto", sans-serif;
     min-height: 100vh;
+
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
 }
 
 header{
     background-color: #f9f228;
     padding-top: 10px;
+}
+
+button{
+    background-color: transparent;
+    border: none;
+}
+
+ul{
+    margin: 0;
+    padding: 0;
+}
+
+li{
+    list-style-type: none;
 }
 
 .header-container{
@@ -67,8 +85,8 @@ header{
 footer{
     background-color: #faffa4;
     
-    position: absolute;
-    bottom: 0px;
+    /* position: absolute; */
+    /* bottom: 0px; */
 
     height: auto;
     min-height: 40px;
@@ -93,6 +111,7 @@ footer{
 }
 
 .overlay{
+    pointer-events: none;
     opacity: 0;
     
     z-index: 10;
@@ -107,4 +126,12 @@ footer{
 
 .overlay.activated{
     opacity: 1;
+}
+
+.brown-text{
+    color: #6c5111;
+}
+
+.light-brown-text{
+    color: #957a3b;
 }

@@ -18,4 +18,5 @@ class UserFiles(models.Model):
     
     class Meta:
         db_table = "user_files"
+        verbose_name = "user_files"
     

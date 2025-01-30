@@ -1,9 +1,10 @@
 import os
 import time
 
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, renderer_classes
 from rest_framework.request import Request
 from rest_framework.response import Response
+from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.exceptions import bad_request
 
 from django.utils.crypto import get_random_string
@@ -72,6 +73,12 @@ def get_all_user_files(request: Request):
     if not user_token:
         return Response("not authorized", status=401)
 
-    user_files = models.UserFiles.objects.filter(user_token=user_token)
+    user_files = models.UserFiles.objects.filter(user_token=user_token).order_by("-download_time")
     serializer = serializators.UserFilesSerializer(user_files, many=True)
     return Response(serializer.data, 200)
+
+@api_view(["GET"])
+@renderer_classes([TemplateHTMLRenderer])
+def get_history_item(request: Request):
+    return Response(data={}, status=200, template_name="archivator/history_item.html")
+    
