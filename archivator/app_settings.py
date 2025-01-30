@@ -7,9 +7,11 @@ APP_DIR = Path(__file__).resolve().parent
 ARCHIVATOR_LOGGER_PATH = APP_DIR / "archivator_logger.log"
 
 MEDIA_DIR = site_settings.MEDIA_ROOT
+STORAGE_PATH = MEDIA_DIR / "storage"
 
-TEMP_FILES_DIR = MEDIA_DIR / "storage" / "temp"
-ARCHIVATED_FILES_DIR = MEDIA_DIR / "storage" / "archivated_files"
+TEMP_FILES_DIR = STORAGE_PATH / "temp"
+ARCHIVATED_FILES_DIR = STORAGE_PATH / "archivated_files"
+DEARCHIVATED_FILES_DIR = STORAGE_PATH / "dearchivated_files"
 
 MAX_FILE_SIZE_BYTES = 1024 * 1024 * 100
 ARCHIVATED_FILE_TIME_TO_LIVE_DAYS = 7
@@ -27,4 +29,5 @@ arch_logger.setLevel(logging.DEBUG)
 
 TEMP_FILES_DIR.mkdir(parents=True, exist_ok=True)
 ARCHIVATED_FILES_DIR.mkdir(parents=True, exist_ok=True)
+DEARCHIVATED_FILES_DIR.mkdir(parents=True, exist_ok=True)
 #Temporaly

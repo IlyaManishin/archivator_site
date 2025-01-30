@@ -16,7 +16,7 @@ body{
 }
 
 header{
-    background-color: #f9f228;
+    background-color: #fde652;
     padding-top: 10px;
 }
 
@@ -115,7 +115,7 @@ footer{
     opacity: 0;
     
     z-index: 10;
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     height: 100%;

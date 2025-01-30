@@ -94,8 +94,9 @@ async function updateHistory(){
         const newItem = historyItem.cloneNode(true);
      
         let fileName = element["original_name"];
-        if (fileName.length >= 20){
-            fileName = fileName.slice(0, 17) + "..."
+        const maxLength = 40;
+        if (fileName.length > maxLength){
+            fileName = fileName.slice(0, maxLength - 3) + "...";
         }
         const fileId = element["file_id"];
         const fileType = element["file_type"];

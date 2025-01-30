@@ -16,6 +16,7 @@ from archivator import archivation_logic
 from archivator.archivation_logic import (
     SavingFileModelException,
     CreateArchiveException,
+    DearchivatingException
 )
 from archivator import utils
 from archivator.app_settings import arch_logger
@@ -47,22 +48,26 @@ def send_file_to_archivator(request: Request):
         for chunk in uploaded_file.chunks():
             file.write(chunk)
 
-    if not is_archive:
-        try:
+    try:
+        if not is_archive:
             archivation_logic.archivate_file(user_token, file_dest_path, file_id, original_filename)
-        except SavingFileModelException():
-            return Response("invalid file", 500)
-        except CreateArchiveException():
-            return Response("archivation error", 500)
-        except Exception as err:
-            arch_logger.exception(err)
-            arch_logger.error(err)
+        else:
+            archivation_logic.dearchivate_file(user_token, file_dest_path, file_id, original_filename)
             
-            return Response("smth wrong", 500)
-    else:
-        pass
-    if os.path.exists(file_dest_path):
-        os.remove(file_dest_path)
+    except SavingFileModelException:
+        return Response("invalid file", 500)
+    except CreateArchiveException:
+        return Response("archivation error", 500)
+    except DearchivatingException:
+        return Response("dearchivation error", 500)
+    except Exception as err:
+        arch_logger.exception(err)
+        arch_logger.error(err)
+        
+        return Response("smth wrong", 500)
+    finally:
+        if os.path.exists(file_dest_path):
+            os.remove(file_dest_path)
 
     time.sleep(2)
     return Response("File uploaded", 200)

@@ -176,7 +176,7 @@
     border-color: #ad8a38;
     
     min-height: 100px;
-    width: 400px;
+    width: 500px;
     border-radius: 10px;
     margin-bottom: 50px;
 }
@@ -199,12 +199,13 @@
 .history-list img{
     height: 25px;
     width: auto;
+    margin-left: 20px;
 }
 
 .history-list .fields{
     display: flex;
     justify-content: space-between;
-    width: 60%;
+    width: 100%;
 }
 
 .history-single-elem{
