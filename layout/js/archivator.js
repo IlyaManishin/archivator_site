@@ -34,9 +34,10 @@ async function onStartUploading(){
     loadingPanel.style.display = "flex";
 }
 
-let historyItem = null;
+let historyItemPattern = null;
 const historyPanel = document.getElementsByClassName("history-panel")[0];
 const historyList = historyPanel.getElementsByClassName("history-list")[0];
+
 
 function setAnimationOfHistory(){
     historyList.innerHTML = "";
@@ -54,22 +55,31 @@ function setEmptyHistory(){
 
 async function updateHistory(){
     setAnimationOfHistory();
-    const url = `${config["base-host"]}/archivator/files-list`;
     const token = await getToken();
     if (!token){
         setEmptyHistory();
         return;
     };
-
-    const resp = await fetch(url, {
-        headers : {
-            "Authorization" : token,
-        }
-    })
+    
+    let resp;
+    try{
+        const url = `${config["base-host"]}/archivator/files-list`;
+        resp = await fetch(url, {
+            headers : {
+                "Authorization" : token,
+            }
+        })
+    }
+    catch (error){
+        notifier(error, "error")
+        setEmptyHistory();
+        return;
+    }
     if (!resp.ok) {
         setEmptyHistory();
         return;
     }
+
     let userFiles = await resp.json();
     if (userFiles.length == 0){
         setEmptyHistory();
@@ -77,36 +87,43 @@ async function updateHistory(){
     }
     userFiles = userFiles.slice(0, 11);
     
-    if (!historyItem){
+    if (!historyItemPattern){
         const url = `${config["base-host"]}/archivator/history-item`;
-        const resp = await fetch(url);
-        if (resp.status != 200) {
+        try{
+            const resp = await fetch(url);
+            if (!resp.ok) {
+                setEmptyHistory();
+                return;
+            };
+            const respText = await resp.text();
+            const parsed = (new DOMParser()).parseFromString(respText, "text/html");
+            historyItemPattern = parsed.body.firstChild;
+        }catch (error){
             setEmptyHistory();
             return;
-        };
-
-        const respText = await resp.text();
-        const parsed = (new DOMParser()).parseFromString(respText, "text/html");
-        historyItem = parsed.body.firstChild;
+        }
     }
-
     userFiles.forEach(element => {
-        const newItem = historyItem.cloneNode(true);
+        const newItem = historyItemPattern.cloneNode(true);
      
         let fileName = element["original_name"];
-        const maxLength = 40;
+        const maxLength = 35;
         if (fileName.length > maxLength){
             fileName = fileName.slice(0, maxLength - 3) + "...";
         }
         const fileId = element["file_id"];
         const fileType = element["file_type"];
-        // const downloadTime = element["download_time"];
         
         const file_type_converts = {"archive" : "Файл", "any_file" : "Архив"}
         
         newItem.getElementsByClassName("file-name")[0].innerHTML = fileName;
         newItem.getElementsByClassName("file-type")[0].innerHTML = file_type_converts[fileType];
-        newItem.getElementsByClassName("file-download")[0].id = fileId;
+
+        const downloadButton = newItem.getElementsByClassName("file-download")[0];
+        downloadButton.id = fileId;
+        const deleteFileButton = newItem.getElementsByClassName("file-delete")[0];
+        deleteFileButton.id = fileId;
+
         
         historyList.appendChild(newItem);
     });
@@ -188,6 +205,54 @@ async function fileDropHandler(event){
     await uploadFile(file);
 }
 
+let isDeleting = false;
+async function deleteFile(file_id){
+    const url = `${config["base-host"]}/archivator/file-delete/`;
+    const data = {"file_id" : file_id};
+    const resp = await fetch(url, {
+        method: "POST",
+        headers: {
+            "Content-Type" : "application/json",
+            "Authorization" : await getToken(),
+        },
+        body: JSON.stringify(data),
+    });
+    const respData = await resp.json();
+    if (resp.status != 200) notifier(respData, "debug");
+}
+
+let isDownloading = true;
+async function downloadFile(file_id){
+    const url = `${config["base-host"]}/archivator/file-download/`
+    const resp = await fetch(url, {
+        method: "POST",
+        headers: {
+            "Content-Type" : "application/json",
+            "Authorization" : await getToken(),
+        },
+        body: JSON.stringify({"file_id" : file_id})
+    });
+    if (!resp.ok) return;
+
+    const disposition = resp.headers.get("Content-Disposition"); 
+    if (!disposition) return;
+    
+    const filenameMatch = disposition.match(/filename="(.+)"/);
+    if (filenameMatch.length == 0) return;
+    const filename = filenameMatch[0].replace("filename=", "").replaceAll('"', "");
+
+    const blob = await resp.blob();
+    const blob_url = URL.createObjectURL(blob);
+    
+    const a = document.createElement("a");
+    a.style.display = "none";
+    a.href = blob_url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+}
+
 function handlersConnecting(){
     const fileOverlay = document.getElementById("file-overlay");
     const fileWindow = document.getElementById("file-window");
@@ -198,6 +263,31 @@ function handlersConnecting(){
     fileWindow.addEventListener("dragover", fileDragOverHandler);
     fileWindow.addEventListener("dragleave", fileDragLeaveHandler);
     fileWindow.addEventListener("drop", fileDropHandler);       
+
+    const historyPanel = document.getElementsByClassName("history-panel")[0];
+    historyPanel.addEventListener("click", async function (event){
+        if (event.target.classList.contains("file-delete")){
+            isDeleting = true;
+            const deleteButton = event.target;
+            const file_id = deleteButton.id;
+            await deleteFile(file_id);
+
+            const historyItem = deleteButton.parentElement;
+            historyItem.remove();
+            if (historyPanel.getElementsByTagName("li").length == 0) setEmptyHistory();
+            
+            isDeleting = false;
+        }
+        else if (event.target.classList.contains("file-download")){
+            isDownloading = true;
+            const downloadButton = event.target;
+            const file_id = downloadButton.id;
+            downloadFile(file_id);
+            isDownloading = false;
+        }
+    })
 }
-handlersConnecting();
-updateHistory();
+document.addEventListener("DOMContentLoaded", function (){
+    handlersConnecting();
+    updateHistory();
+})

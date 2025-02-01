@@ -2,17 +2,6 @@
     background-color: #4c390d5a;
 }
 
-.container-inner{
-    height: 100%;
-    width: 100%;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    
-}
-
 .arch-window{
     /* height: 500px;
     width: 500px; */
@@ -199,7 +188,7 @@
 .history-list img{
     height: 25px;
     width: auto;
-    margin-left: 20px;
+    margin-left: 10px;
 }
 
 .history-list .fields{

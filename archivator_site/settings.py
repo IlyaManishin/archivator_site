@@ -62,13 +62,24 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     
-    
 ]
 
 CORS_ALLOWED_ORIGINS = [
     "http://0.0.0.0:8000",  
     "http://127.0.0.1:8080",
 ]
+CORS_ALLOW_HEADERS = [
+    "Authorization",
+    "Content-Disposition", 
+    "Content-Type",
+    "Accept",
+]
+CORS_ALLOW_METHODS = (
+    'GET',
+    'POST',
+    'OPTIONS',
+    'HEAD',
+)
 
 ROOT_URLCONF = 'archivator_site.urls'
 

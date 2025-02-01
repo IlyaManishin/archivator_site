@@ -1,0 +1,45 @@
+.column-container__about{
+    max-width: 400px;
+
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+h1.its-me{
+    font-size: 30px;
+    display: flex;
+}
+
+.my-photo{
+    margin: 0 40px;
+    display: flex;
+    justify-content: center;
+}
+
+.my-photo img{
+    display: block;
+
+    width: 100%;
+    height: auto;
+
+    border-radius: 20px;
+}
+
+.my-links{
+    margin: 20px 0;
+    font-size: 20px;
+}
+
+.my-link{
+    margin-top: 10px;
+}
+
+@media (max-width: 768px) {
+    .my-links{
+        font-size: 18px;
+    }
+    h1.its-me{
+        font-size: 25px;
+    }
+}

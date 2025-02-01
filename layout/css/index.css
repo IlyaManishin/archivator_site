@@ -34,6 +34,10 @@ li{
     list-style-type: none;
 }
 
+a{
+    text-decoration: none;
+}
+
 .header-container{
     display: flex;
     align-items: center;
@@ -132,6 +136,32 @@ footer{
     color: #6c5111;
 }
 
+.brown-text a{
+    color: #6c5111;
+}
+
 .light-brown-text{
     color: #957a3b;
+}
+
+.light-brown-text a{
+    color: #957a3b;
+}
+
+
+.column-container-inner{
+    height: 100%;
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.inside-block-center{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

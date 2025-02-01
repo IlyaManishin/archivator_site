@@ -4,14 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/index.css">
-    <link rel="stylesheet" href="../css/main_page.css">
     <link rel="icon" type="image/x-icon" href="/pictures/archivator_logo.png">
     <title>Mashin-archivator</title>
-
-    <!-- Index page -->
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+   <!--INDEX-->
+    <link rel="stylesheet" href="../css/archivator.css">
+
 </head>
 <body>
     <div class="overlay file-drop-overlay" id="file-overlay"></div>
@@ -24,18 +26,17 @@
             </div>
             <div class="header-menu">
                 <ul>
-                    <li><a href="index.php">Главная</a></li>
-                    <li><a href="about.php">Обо мне</a></li>
+                    <li><a href="http://0.0.0.0:8000/html/index.html">Главная</a></li>
+                    <li><a href="http://0.0.0.0:8000/html/about_me.html">Обо мне</a></li>
                     <li><a href="contact.php">Фотки</a></li>
                 </ul>
             </div>
         </div>
     </header>
-    <div class="content-container">
-        <!-- CONTENT -->
+    <!-- CONTENT -->
+    <div class="content-container" id="archivator">
         
-
-        <div class="container-inner">
+        <div class="column-container-inner">
             <div class="arch-window"> 
                 <div class="arch-title">
                     <h1 class="brown-text">Archiso</h1>
@@ -99,9 +100,9 @@
 
     <script type="module" src="../js/index.js"></script>
     <script type="module" src="../js/notifier.js"></script>
-    <script type="module" src="../js/archivator.js"></script>
     <script type="module" src="../js/config.js"></script>
-
+    
+    <script type="module" src="../js/archivator.js"></script>
 
 </body>
 </html>

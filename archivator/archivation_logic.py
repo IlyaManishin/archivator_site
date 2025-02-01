@@ -31,6 +31,7 @@ def _archivate(dest_path: str, src_path: str, original_filename: str):
 
     try:
         subprocess.call(["zip", "-Djq", zip_path, src_path, txt_path])
+
     except Exception as err:
         arch_logger.exception(err)
         arch_logger.error(err)
@@ -46,7 +47,8 @@ def _archivate(dest_path: str, src_path: str, original_filename: str):
     subprocess.call(["mv", zip_path, dest_path])
     
 def archivate_file(user_token: UserToken, source_path: Path, file_id: str, original_filename: str) -> str:
-    archivated_file_path = app_settings.ARCHIVATED_FILES_DIR / f"{file_id}{app_settings.ARCHIVATOR_EXTENSION}"
+    archivated_file_name =f"{file_id}{app_settings.ARCHIVATOR_EXTENSION}"
+    archivated_file_path = app_settings.ARCHIVATED_FILES_DIR / archivated_file_name
     _archivate(str(archivated_file_path), str(source_path), original_filename)
     
     archivated_file = models.UserFiles()
@@ -56,6 +58,7 @@ def archivate_file(user_token: UserToken, source_path: Path, file_id: str, origi
     archivated_file.file_path = archivated_file_path
     archivated_file.file_size = os.path.getsize(archivated_file_path)
     archivated_file.original_name = original_filename
+    
     
     try:
         archivated_file.save()
@@ -107,11 +110,13 @@ def _dearchivate(source_path: Path, dest_dir: Path, dest_path: str, file_id: str
         raise DearchivatingException()
     finally:
         _clear_dir_if_exists(temp_dir)
+        if os.path.exists(zip_path): os.remove(zip_path)
 
     return file_name_inside
     
     
 def dearchivate_file(user_token: UserToken, source_path: Path, file_id: str, original_filename: str):
+    
     dest_path = app_settings.DEARCHIVATED_FILES_DIR / file_id
 
     file_name_inside = _dearchivate(source_path, app_settings.DEARCHIVATED_FILES_DIR, dest_path, file_id)
@@ -123,9 +128,9 @@ def dearchivate_file(user_token: UserToken, source_path: Path, file_id: str, ori
     archivated_file.file_path = dest_path
     archivated_file.file_size = os.path.getsize(dest_path)
     archivated_file.original_name = original_filename
+    archivated_file.result_file_name = file_id
     
     archivated_file.file_name_inside = file_name_inside
-    
     archivated_file.save()
     
     
